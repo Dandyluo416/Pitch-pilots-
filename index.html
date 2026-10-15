@@ -12,11 +12,50 @@
 @media(max-width:600px){main{padding:10px 9px 26px}header{padding:3px 3px 8px}.toolbar{padding:10px}.toolbar .btn{padding:9px 11px;font-size:.86rem;min-height:42px}.connection{width:100%;margin-left:0}.game-top{padding:12px 13px 8px}.playfield{height:clamp(240px,40vh,360px)}.plane{width:90px;height:70px;left:8%}.gate{right:13%;width:48px}.gate-sign{left:-10px;width:68px}.settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.test-panel{padding:12px}.metric{padding:12px 6px}.metric-unit{font-size:.7rem}.metric-value{font-size:1.5rem}.stats{gap:9px}.btn{padding:10px 12px}}
 @media(max-height:620px) and (orientation:landscape){.playfield{height:230px}main{max-width:1240px}.game-top{padding-top:8px}.stats strong{font-size:1rem}.track{padding-bottom:7px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+
+/* V2: continuously moving gates and pitch-height coach */
+.playfield{--gate-y:50%;background:linear-gradient(180deg,#90d3ff 0%,#d8f3ff 70%,#e7ffe6 100%)}
+.playfield::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 92px,rgba(255,255,255,.15) 93px 96px);animation:windMotion 3.3s linear infinite}
+.pitch-band{position:absolute;top:calc(var(--gate-y) - 30px);height:60px;left:0;right:0;border-top:2px dashed rgba(33,164,104,.8);border-bottom:2px dashed rgba(33,164,104,.8);background:linear-gradient(#48d5a624,#0dbe7d22);z-index:1;pointer-events:none;transition:top .3s ease}
+.guideline{border-color:#138c6170;z-index:1}
+.gate{left:106%;right:auto;transform:translateX(-50%);will-change:left;z-index:3}
+.gate-upper,.gate-lower{transition:height .3s ease,top .3s ease;box-shadow:inset 5px 0 0 #d4c6ff7c,inset -5px 0 0 #32227b57,0 2px 12px #604f9e20}
+.gate.good .gate-upper,.gate.good .gate-lower{background:repeating-linear-gradient(140deg,#6dca9f 0 14px,#36aa81 14px 28px);border-color:#27865f}
+.gate.bad .gate-upper,.gate.bad .gate-lower{background:repeating-linear-gradient(140deg,#ee907f 0 14px,#d84e53 14px 28px);border-color:#a83138}
+.plane{left:21%;width:91px;height:68px;transition:top 75ms linear;z-index:5;will-change:top}
+.plane.celebrate svg{animation:victory 380ms ease-in-out}
+.plane.idle{animation:bob 2s ease-in-out infinite}
+.pitch-coach{position:absolute;z-index:6;top:12px;left:12px;max-width:min(230px,65%);min-height:61px;display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:16px;background:#ffffffea;color:#22365b;box-shadow:0 6px 18px #27537626;transition:background .12s,color .12s,border-color .12s;border:2px solid #cadff4;pointer-events:none}
+.pitch-coach strong{display:block;font-size:clamp(1rem,3.4vw,1.42rem);line-height:1.15;white-space:nowrap}
+.pitch-coach small{display:block;font-weight:850;font-size:.76rem;line-height:1.35;margin-top:3px}
+.coach-icon{font-size:clamp(1.5rem,5vw,2rem);line-height:1}
+.pitch-coach.high{background:#fff2ce;border-color:#ffb350;color:#7a4606}
+.pitch-coach.low{background:#e4edff;border-color:#85a8ed;color:#204b91}
+.pitch-coach.hit{background:#dffce9;border-color:#43c48a;color:#126541}
+.pitch-coach.waiting{background:#f9fcff;border-color:#cbdff3}
+.playfield-tip{right:8px;left:auto;bottom:7px;max-width:85%;font-size:.70rem;line-height:1.3}
+.flight-accuracy{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:.86rem;font-weight:950;margin:0 0 10px;color:#566885}
+.flight-rail{position:relative;flex:1;max-width:520px;height:29px;border-radius:99px;border:2px solid #fff;box-shadow:0 1px 8px #49597731;background:linear-gradient(90deg,#a5bdf3,#f3f2f7 29%,#78d6a4 43%,#35c889 50%,#78d6a4 57%,#fff1cc 71%,#f6b879)}
+.flight-center{position:absolute;inset:0;left:50%;width:3px;background:#194e3c;opacity:.65;transform:translateX(-50%)}
+.flight-rail b{position:absolute;top:-5px;left:50%;width:12px;height:36px;transform:translateX(-50%);background:#fff;border:3px solid #26376b;border-radius:8px;box-shadow:0 1px 6px #0005;transition:left 70ms linear}
+.game-buttons .btn{flex:1;min-width:86px}
+#burst{color:#fff2a3;text-shadow:0 2px 3px #a76c38,0 6px 12px #0008;font-size:clamp(1.8rem,6vw,3.5rem)}
+@keyframes windMotion{0%{background-position:0 0}100%{background-position:-192px 0}}
+@keyframes victory{0%,100%{transform:rotate(0)}40%{transform:rotate(-16deg) scale(1.14)}}
+@media(max-width:600px){.pitch-coach{padding:7px 9px;top:7px;left:7px;min-height:51px;max-width:67%}.pitch-coach strong{font-size:1.07rem}.pitch-coach small{font-size:.67rem}.coach-icon{font-size:1.6rem}.gate{width:46px}.gate-sign{font-size:.85rem}.plane{left:12%;width:76px;height:58px}.flight-accuracy{font-size:.78rem;gap:5px}.game-buttons .btn{font-size:.81rem;min-width:80px}.game-top{gap:5px}.playfield{height:clamp(255px,41vh,350px)}}
+@media(max-height:650px) and (orientation:landscape){.playfield{height:220px}.pitch-coach{min-height:45px}.pitch-coach strong{font-size:1.02rem}}
+@media(prefers-reduced-motion:reduce){.playfield::before,.plane.celebrate svg{animation:none}}
+
+
+.pitch-coach{position:relative;inset:auto;top:auto;left:auto;max-width:none;width:100%;min-height:51px;border-radius:0;padding:7px 14px;box-shadow:none;z-index:2}
+.pitch-coach strong{font-size:1.15rem}.pitch-coach small{font-size:.73rem}
+@media(max-width:600px){.pitch-coach{position:relative;top:auto;left:auto;max-width:none;min-height:46px;padding:6px 12px}.pitch-coach strong{font-size:1.07rem}.pitch-coach small{font-size:.69rem}}
 </style>
 </head>
 <body>
 <main>
- <header><div><h1>✈️ 音準飛行員</h1><p class="tagline">歌聲冒險實驗室 · 手機 / iPad 測試版</p></div><div class="version">V1.0 · 原型測試</div></header>
+ <header><div><h1>✈️ 音準飛行員</h1><p class="tagline">歌聲冒險實驗室 · 手機 / iPad · 連續飛行</p></div><div class="version">V2.0 · 連續飛行</div></header>
  <div class="surface toolbar">
   <button class="btn btn-primary" id="micBtn">🎤 開啟麥克風</button>
   <button class="btn btn-alt" id="demoBtn">🕹️ 模擬試玩</button>
@@ -32,15 +71,15 @@
    <section class="surface game view on" id="gameView" aria-label="飛行闖關">
     <div class="game-top"><div><div class="eyebrow">目標音高 · SING THIS NOTE</div><h2 class="target" id="targetTitle">G4 <span>Sol</span></h2></div><div class="stats"><div class="stat"><strong id="roundText">1 / 8</strong><small>關卡</small></div><div class="stat"><strong id="scoreText">0 ⭐</strong><small>得分</small></div></div></div>
     <div class="track" id="stepTrack"></div>
-    <div class="playfield" id="playfield" style="--gate-y:50%">
-     <div class="sun"></div><div class="cloud c1">☁</div><div class="cloud c2">☁</div><div class="hills"></div><div class="guideline"></div>
-     <div class="gate"><div class="gate-upper"></div><div class="gate-lower"></div><div class="gate-sign" id="gateSign">G4</div></div>
+    <div class="pitch-coach waiting" id="pitchCoach" role="status" aria-live="off"><span class="coach-icon" id="coachIcon">🎤</span><span class="coach-copy"><strong id="coachTitle">準備開始飛行</strong><small id="coachDetail">唱歌時飛機會升降</small></span></div><div class="playfield" id="playfield" style="--gate-y:50%">
+     <div class="sun"></div><div class="cloud c1">☁</div><div class="cloud c2">☁</div><div class="hills"></div><div class="pitch-band" id="pitchBand"></div><div class="guideline"></div>
+     <div class="gate" id="gate"><div class="gate-upper"></div><div class="gate-lower"></div><div class="gate-sign" id="gateSign">G4</div></div>
      <div class="plane idle" id="plane" aria-label="由音高控制的飛行員">
       <svg viewBox="0 0 130 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M14 47L2 65L27 60Z" fill="#6a5aca"/><ellipse cx="66" cy="46" rx="47" ry="25" fill="#ffca58" stroke="#ac7533" stroke-width="3"/><path d="M62 41L37 8Q56 -2 88 30Z" fill="#f18f6c" stroke="#d36b61" stroke-width="3"/><path d="M67 54L36 80Q68 91 84 67Z" fill="#f2a15e" stroke="#d47f4a" stroke-width="3"/><ellipse cx="82" cy="40" rx="15" ry="12" fill="#fff6d7"/><circle cx="88" cy="40" r="4.5" fill="#253050"/><path d="M109 45L127 42L123 58L107 52" fill="#6853c7"/><path d="M33 42Q42 30 52 38" stroke="#fff7dc" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
      </div><div class="burst" id="burst">🌟 過關！ 🌟</div>
-     <div class="playfield-tip" id="fieldTip">唱高會上升，唱低會下降</div>
+     <div class="playfield-tip" id="fieldTip">洞口會從右側靠近，準備唱準目標音</div>
     </div>
-    <div class="hud"><div class="status-line"><div class="feedback" id="flightFeedback" aria-live="polite">開啟麥克風後，點「開始闖關」</div><div class="readout" id="livePitch">目前：—</div></div><div class="progress" aria-label="穩定音高進度"><div id="holdBar"></div></div><div class="subline" id="holdInfo">音準對準洞口並維持一小段時間，即可通過。</div>
+    <div class="hud"><div class="flight-accuracy" aria-label="音準高低指示"><span>偏低 ↓</span><div class="flight-rail"><i class="flight-center"></i><b id="flightNeedle"></b></div><span>↑ 偏高</span></div><div class="status-line"><div class="feedback" id="flightFeedback" aria-live="polite">開啟麥克風後，點「開始闖關」</div><div class="readout" id="livePitch">目前：—</div></div><div class="progress" aria-label="穩定音高進度"><div id="holdBar"></div></div><div class="subline" id="holdInfo">保持音準正確，洞口移到飛機旁時才會過關。</div>
      <div class="game-buttons"><button id="startGameBtn" class="btn btn-primary">🚀 開始闖關</button><button id="listenBtn" class="btn btn-alt">🔊 聽目標音</button><button id="skipBtn" class="btn btn-alt">換一題</button><button id="restartBtn" class="btn btn-alt">重新開始</button></div><div class="demo-fly" id="demoFly"><label for="demoFlySlider">🕹️ 模擬音高（不使用麥克風）</label><input type="range" id="demoFlySlider" min="48" max="82" step="0.02" value="67"></div>
     </div>
    </section>
@@ -56,11 +95,11 @@
    </section>
   </div>
   <div class="right-column">
-   <details class="surface settings" id="settingsPanel" open><summary>⚙️ 遊戲設定</summary><div class="settings-grid"><div class="setting"><label for="rangeSelect">練習音域</label><select id="rangeSelect"><option value="easy">C4–C5（入門）</option><option value="low">G3–G4（較低）</option><option value="wide">C4–G5（較廣）</option></select></div><div class="setting"><label for="toleranceSelect">音準容許度</label><select id="toleranceSelect"><option value="50">簡單 ±50 cents</option><option value="35" selected>普通 ±35 cents</option><option value="20">困難 ±20 cents</option></select></div><div class="setting"><label for="holdSelect">需要維持多久</label><select id="holdSelect"><option value="400">0.4 秒</option><option value="700" selected>0.7 秒</option><option value="1200">1.2 秒</option></select></div><div class="setting"><label for="gatesSelect">關卡數量</label><select id="gatesSelect"><option value="5">5 關</option><option value="8" selected>8 關</option><option value="12">12 關</option></select></div><div class="setting"><label for="modeSelect">音名顯示</label><select id="modeSelect"><option value="both">音名＋唱名</option><option value="letter">C D E…</option><option value="solfege">Do Re Mi…</option></select></div><div class="setting"><label for="sensitivitySelect">收音敏感度</label><select id="sensitivitySelect"><option value="0.006">高（輕聲）</option><option value="0.012" selected>中（建議）</option><option value="0.025">低（吵雜環境）</option></select></div></div><div class="note-help">音高以十二平均律 A4 = 440 Hz 辨識；唱名使用固定 Do（C = Do）。設定更新後會套用到下一題。麥克風音訊只在裝置內即時分析，不會上傳或儲存。</div></details>
+   <details class="surface settings" id="settingsPanel" open><summary>⚙️ 遊戲設定</summary><div class="settings-grid"><div class="setting"><label for="rangeSelect">練習音域</label><select id="rangeSelect"><option value="easy">C4–C5（入門）</option><option value="low">G3–G4（中低）</option><option value="bass">E2–E4（男聲低音）</option><option value="wide">C4–G5（較廣）</option></select></div><div class="setting"><label for="toleranceSelect">音準容許度</label><select id="toleranceSelect"><option value="50">簡單 ±50 cents</option><option value="35" selected>普通 ±35 cents</option><option value="20">困難 ±20 cents</option></select></div><div class="setting"><label for="holdSelect">需要維持多久</label><select id="holdSelect"><option value="400">0.4 秒</option><option value="700" selected>0.7 秒</option><option value="1200">1.2 秒</option></select></div><div class="setting"><label for="speedSelect">飛行速度</label><select id="speedSelect"><option value="9">慢速（初學）</option><option value="7" selected>一般速度</option><option value="5">快速挑戰</option></select></div><div class="setting"><label for="gatesSelect">關卡數量</label><select id="gatesSelect"><option value="5">5 關</option><option value="8" selected>8 關</option><option value="12">12 關</option></select></div><div class="setting"><label for="modeSelect">音名顯示</label><select id="modeSelect"><option value="both">音名＋唱名</option><option value="letter">C D E…</option><option value="solfege">Do Re Mi…</option></select></div><div class="setting"><label for="sensitivitySelect">收音敏感度</label><select id="sensitivitySelect"><option value="0.006">高（輕聲）</option><option value="0.012" selected>中（建議）</option><option value="0.025">低（吵雜環境）</option></select></div></div><div class="note-help">音高以十二平均律 A4 = 440 Hz 辨識；唱名使用固定 Do（C = Do）。E2–E4 模式包含較低的成人男聲音域。改變音域或關卡數會重新開始；其他設定即時生效。麥克風音訊只在裝置內即時分析，不會上傳或儲存。</div></details>
    <div class="surface" style="padding:14px 16px"><div style="font-weight:950;margin-bottom:5px">💡 第一次測試建議</div><div style="color:#667895;font-size:.84rem">先按「開啟麥克風」→「收音／音準檢查」，確認音名能跟著歌聲變化，再進入遊戲。若尚未有 HTTPS 網址，可先用「模擬試玩」測試畫面。</div></div>
   </div>
  </div>
- <div class="privacy">V1 實驗版 · 音高辨識會受到背景噪音、聲音泛音、麥克風及裝置處理影響。手機與 iPad 上請使用 HTTPS 網址開啟。</div>
+ <div class="privacy">V2 測試版 · E2–E4 仍需真實男性歌聲測試；音高辨識會受到背景噪音、聲音泛音、麥克風及裝置處理影響。手機與 iPad 上請使用 HTTPS 網址開啟。</div>
 </main>
 <div class="notice" id="notice" role="status"></div>
 <div class="end-overlay" id="endOverlay" role="dialog" aria-modal="true" aria-label="闖關結束"><div class="end-card"><div class="result-emoji">🏆</div><h2>飛行任務完成！</h2><p id="endText">恭喜完成音準任務！</p><button class="btn btn-primary" id="againBtn">再玩一次</button><button class="btn btn-alt" id="closeEndBtn">返回遊戲</button></div></div>
@@ -69,43 +108,82 @@
 const $=id=>document.getElementById(id);
 const noteNames=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
 const solfege=['Do','Di','Re','Ri','Mi','Fa','Fi','Sol','Si','La','Li','Ti'];
-const whitePitch=[55,57,59,60,62,64,65,67,69,71,72,74,76,77,79];
-const rangeMap={easy:[60,72],low:[55,67],wide:[60,79]};
-const state={mode:'off',tab:'game',stream:null,context:null,source:null,analyser:null,data:null,raf:0,lastAnalysis:0,history:[],lastValidAt:0,pitch:null,confidence:0,rms:0,detectedAt:0,started:false,clearing:false,score:0,round:0,targetMidi:67,lastTarget:null,total:8,holdMs:0,lastFrame:0,delayId:0,planeY:50,seenMicPermission:false};
+const semitonesWhite=[0,2,4,5,7,9,11];
+const rangeMap={easy:[60,72],low:[55,67],wide:[60,79],bass:[40,64]};
+const state={mode:'off',tab:'game',stream:null,context:null,source:null,analyser:null,data:null,raf:0,lastAnalysis:0,
+ history:[],lastValidAt:0,pitch:null,confidence:0,rms:0,detectedAt:0,started:false,clearing:false,
+ score:0,round:0,targetMidi:67,lastTarget:null,total:8,holdMs:0,lastFrame:0,delayId:0,planeY:50,
+ lastWorldFrame:0,gateX:106,misses:0,missStreak:0,seenMicPermission:false};
 const midiHz=m=>440*Math.pow(2,(m-69)/12);
 const hzMidi=f=>69+12*Math.log2(f/440);
 const noteLabel=m=>{const n=Math.round(m);return noteNames[((n%12)+12)%12]+(Math.floor(n/12)-1)};
 const solLabel=m=>solfege[((Math.round(m)%12)+12)%12];
 const cents=(a,b)=>Math.round(1200*Math.log2(a/b));
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
-const setMessage=(msg)=>{const el=$('notice');el.textContent=msg;el.classList.add('show');clearTimeout(setMessage.timer);setMessage.timer=setTimeout(()=>el.classList.remove('show'),4800)};
-const ui=(id,text)=>{$(id).textContent=text};
-function selectedRange(){return rangeMap[$('rangeSelect').value]||rangeMap.easy}
+const ui=(id,value)=>$(id).textContent=value;
+const setMessage=msg=>{const el=$('notice');el.textContent=msg;el.classList.add('show');clearTimeout(setMessage.timer);setMessage.timer=setTimeout(()=>el.classList.remove('show'),4600)};
+const selectedRange=()=>rangeMap[$('rangeSelect').value]||rangeMap.easy;
+function refreshControls(){ui('startGameBtn',state.started?'⏸ 暫停飛行':(state.score>0?'▶ 繼續飛行':'🚀 開始闖關'))}
+function updateCoach(kind,title,detail){const el=$('pitchCoach');el.className='pitch-coach '+kind;ui('coachIcon',kind==='high'?'⬇️':kind==='low'?'⬆️':kind==='hit'?'🎯':'🎤');ui('coachTitle',title);ui('coachDetail',detail)}
 function formatTarget(){const m=state.targetMidi,n=noteLabel(m),sol=solLabel(m),mode=$('modeSelect').value;
- ui('targetTitle',mode==='letter'?n:mode==='solfege'?sol: n+'  '+sol);
+ ui('targetTitle',mode==='letter'?n:mode==='solfege'?sol:n+'  '+sol);
  ui('gateSign',mode==='solfege'?sol:n);ui('scaleLabel','目標：'+n);
  const [min,max]=selectedRange();const ratio=(max-m)/(max-min);
- const yy=clamp(22+ratio*56,22,78);$('playfield').style.setProperty('--gate-y',yy+'%');
- if(!state.pitch&&!state.started)$('plane').style.top='50%';$('demoSlider').value=String(m);$('demoFlySlider').value=String(m);ui('demoSliderLabel',n);
+ const yy=clamp(24+ratio*52,24,76);$('playfield').style.setProperty('--gate-y',yy+'%');
+ if(!state.started&&!state.pitch){state.planeY=yy;$('plane').style.top=yy+'%'}
+ // Crucially, do not retarget the demo slider on every new gate: the child must adjust it.
+ ui('demoSliderLabel',noteLabel(Number($('demoSlider').value)));
 }
-function pickTarget(){const [low,high]=selectedRange();const pool=whitePitch.filter(n=>n>=low&&n<=high);let choices=pool.filter(n=>n!==state.lastTarget);if(!choices.length)choices=pool;const target=choices[Math.floor(Math.random()*choices.length)];state.lastTarget=target;state.targetMidi=target;formatTarget()}
-function refreshProgress(){const total=state.total;const wrap=$('stepTrack');wrap.replaceChildren();for(let i=0;i<total;i++){const bar=document.createElement('div');bar.className='step'+(i<state.score?' passed':i===state.score?' current':'');wrap.appendChild(bar)}ui('roundText',Math.min(state.score+1,total)+' / '+total);ui('scoreText',state.score+' ⭐')}
-function setConnection(){const dot=$('micDot');dot.className='dot'+(state.mode==='mic'?' good':state.mode==='demo'?' demo':'');ui('connectText',state.mode==='mic'?'麥克風正在收音':state.mode==='demo'?'模擬模式（未收音）':'麥克風尚未啟動');$('stopBtn').disabled=state.mode==='off';ui('micBtn',state.mode==='mic'?'🎤 重新連線':'🎤 開啟麥克風');$('demoPanel').classList.toggle('show',state.mode==='demo');$('demoFly').classList.toggle('show',state.mode==='demo');ui('demoBtn',state.mode==='demo'?'🕹️ 正在模擬':'🕹️ 模擬試玩');ui('fieldTip',state.mode==='demo'?'模擬模式：使用滑桿控制高度':'唱高會上升，唱低會下降');}
-function switchTab(tab){state.tab=tab;for(const t of ['game','test']){$(t+'View').classList.toggle('on',tab===t);$('tab'+t[0].toUpperCase()+t.slice(1)).classList.toggle('on',tab===t);$('tab'+t[0].toUpperCase()+t.slice(1)).setAttribute('aria-selected',tab===t?'true':'false')}if(tab==='test'&&state.mode==='off')ui('diagnostic','請按「開啟麥克風」，授權後試唱長音，確認音準能穩定顯示。')}
-function stopAudio(){cancelAnimationFrame(state.raf);state.raf=0;if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null}if(state.source){try{state.source.disconnect()}catch(e){}state.source=null}if(state.analyser){try{state.analyser.disconnect()}catch(e){}state.analyser=null}if(state.context){const ctx=state.context;state.context=null;ctx.close().catch(()=>{})}state.data=null;state.pitch=null;state.history=[];state.rms=0;state.confidence=0;state.mode='off';state.started=false;state.holdMs=0;clearTimeout(state.delayId);state.clearing=false;ui('flightFeedback','已停止收音');setConnection();paintFrame(null)}
-async function enableMic(){if(state.mode!=='off')stopAudio();if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){setMessage('無法啟用麥克風：請改用 Safari/Chrome 開啟 HTTPS 網址。直接開啟本機檔案可能無法收音。');return}
+function pickTarget(){const [low,high]=selectedRange(),pool=[];
+ for(let m=low;m<=high;m++)if(semitonesWhite.includes(m%12))pool.push(m);
+ let choices=pool.filter(m=>m!==state.lastTarget);if(!choices.length)choices=pool;
+ const target=choices[Math.floor(Math.random()*choices.length)];state.targetMidi=target;state.lastTarget=target;formatTarget();
+}
+function refreshProgress(){const total=state.total,wrap=$('stepTrack');wrap.replaceChildren();
+ for(let i=0;i<total;i++){const bar=document.createElement('div');bar.className='step'+(i<state.score?' passed':i===state.score?' current':'');wrap.appendChild(bar)}
+ ui('roundText',Math.min(state.score+1,total)+' / '+total);ui('scoreText',state.score+' ⭐');
+}
+function setConnection(){const dot=$('micDot');dot.className='dot'+(state.mode==='mic'?' good':state.mode==='demo'?' demo':'');
+ ui('connectText',state.mode==='mic'?'麥克風正在收音':state.mode==='demo'?'模擬模式（未收音）':'麥克風尚未啟動');
+ $('stopBtn').disabled=state.mode==='off';ui('micBtn',state.mode==='mic'?'🎤 重新連線':'🎤 開啟麥克風');
+ $('demoPanel').classList.toggle('show',state.mode==='demo');$('demoFly').classList.toggle('show',state.mode==='demo');
+ ui('demoBtn',state.mode==='demo'?'🕹️ 正在模擬':'🕹️ 模擬試玩');
+ ui('fieldTip',state.mode==='demo'?'用下方滑桿控制飛行高度':'唱高上升、唱低下降；洞口會持續靠近');
+}
+function switchTab(tab){state.tab=tab;for(const t of ['game','test']){
+ $(t+'View').classList.toggle('on',tab===t);$('tab'+t[0].toUpperCase()+t.slice(1)).classList.toggle('on',tab===t);
+ $('tab'+t[0].toUpperCase()+t.slice(1)).setAttribute('aria-selected',tab===t?'true':'false')
+ }if(tab==='test'&&state.mode==='off')ui('diagnostic','請按「開啟麥克風」，試唱長音確認辨識。')}
+function stopAudio(){cancelAnimationFrame(state.raf);state.raf=0;clearTimeout(state.delayId);state.delayId=0;
+ if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null}
+ if(state.source){try{state.source.disconnect()}catch(e){}state.source=null}
+ if(state.analyser){try{state.analyser.disconnect()}catch(e){}state.analyser=null}
+ if(state.context){const ctx=state.context;state.context=null;ctx.close().catch(()=>{})}
+ state.data=null;state.pitch=null;state.history=[];state.rms=0;state.confidence=0;state.mode='off';state.started=false;state.holdMs=0;state.clearing=false;
+ $('gate').classList.remove('good','bad');ui('flightFeedback','已停止收音');setConnection();refreshControls();paintFrame(null);
+}
+async function enableMic(){if(state.mode!=='off')stopAudio();if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+ setMessage('請使用 Safari / Chrome 開啟 HTTPS 網址後授權麥克風。直接開本機檔案可能無法收音。');return}
+ let stream=null,ctx=null;
  try{ui('connectText','正在詢問麥克風權限…');
-  let stream;
   try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1},video:false})}
   catch(e){if(e.name==='OverconstrainedError'||e.name==='TypeError')stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});else throw e}
   const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)throw new Error('此瀏覽器不支援 Web Audio');
-  const ctx=new Ctx();await ctx.resume();let src=ctx.createMediaStreamSource(stream),an=ctx.createAnalyser();an.fftSize=4096;an.smoothingTimeConstant=0;src.connect(an);
-  state.mode='mic';state.context=ctx;state.stream=stream;state.source=src;state.analyser=an;state.data=new Float32Array(an.fftSize);state.lastAnalysis=0;state.history=[];state.seenMicPermission=true;
+  ctx=new Ctx();await ctx.resume();let src=ctx.createMediaStreamSource(stream),an=ctx.createAnalyser();
+  an.fftSize=$('rangeSelect').value==='bass'?8192:4096;an.smoothingTimeConstant=0;src.connect(an);
+  state.mode='mic';state.context=ctx;state.stream=stream;state.source=src;state.analyser=an;state.data=new Float32Array(an.fftSize);
+  state.lastAnalysis=0;state.history=[];state.pitch=null;state.seenMicPermission=true;state.lastWorldFrame=0;
   stream.getAudioTracks().forEach(t=>t.addEventListener('ended',()=>{if(state.mode==='mic'){stopAudio();setMessage('麥克風已中斷，請重新連線')}}));
-  state.raf=requestAnimationFrame(loop);setConnection();switchTab('test');ui('diagnostic','已連線！請對著麥克風持續唱「嗚——」，觀察音高是否穩定。');
- }catch(err){stopAudio();let msg='無法取得麥克風：'+(err.message||err.name||'未知錯誤');if(err.name==='NotAllowedError'||err.name==='PermissionDeniedError')msg='沒有麥克風權限。請在 Safari 網址列的網站設定或 iPhone/iPad 設定中允許麥克風，再重新整理。';if(err.name==='NotFoundError')msg='找不到可用的麥克風。請確認裝置的收音設備。';setMessage(msg);ui('diagnostic',msg)}
+  state.raf=requestAnimationFrame(loop);setConnection();switchTab('test');ui('diagnostic','已連線！先唱一個持續的長音，看辨識結果是否穩定。');
+ }catch(err){if(stream)stream.getTracks().forEach(t=>t.stop());if(ctx)ctx.close().catch(()=>{});stopAudio();
+  let msg='無法取得麥克風：'+(err.message||err.name||'未知錯誤');
+  if(err.name==='NotAllowedError'||err.name==='PermissionDeniedError')msg='麥克風權限未允許，請在 Safari 的網站設定中允許麥克風，再重新整理。';
+  if(err.name==='NotFoundError')msg='找不到麥克風，請確認收音設備。';setMessage(msg);ui('diagnostic',msg)}
 }
-function enableDemo(){stopAudio();state.mode='demo';state.lastAnalysis=0;state.pitch=null;state.history=[];setConnection();switchTab('test');state.raf=requestAnimationFrame(loop);setMessage('已開啟模擬：此模式不會讀取真正的歌聲。可用下方滑桿測試過關效果。')}
+function enableDemo(){stopAudio();state.mode='demo';state.lastAnalysis=0;state.pitch=null;state.history=[];setConnection();switchTab('test');
+ state.raf=requestAnimationFrame(loop);setMessage('已開啟模擬：不會讀取麥克風。用滑桿練習控制飛機。')}
+// Preserve the V1 pitch estimator for previously tested ranges.
+// A dedicated long-window downsampled YIN estimator is used only for E2–E4.
 // YIN-inspired normalized difference: robust to harmonics and separate RMS + confidence gating.
 // Pure function can be unit-tested with known sine waves.
 function detectPitch(samples,sampleRate,minFreq,maxFreq){const N=1700;
@@ -129,6 +207,37 @@ function detectPitch(samples,sampleRate,minFreq,maxFreq){const N=1700;
  if(!Number.isFinite(freq)||freq<minFreq||freq>maxFreq)return{freq:null,rms,quality:0,reason:'unstable'};
  return{freq,rms,quality:clamp(1-norm[index],0,1),reason:'ok'}
 }
+
+function detectBassPitch(samples,sampleRate,minFreq,maxFreq){
+ // Downsample by 2 without introducing any high-frequency instability into the bass band.
+ // 8192 real microphone samples cover 170–185 ms at normal phone sample rates.
+ const factor=2,len=Math.floor(samples.length/factor);
+ if(len<2000)return null;
+ const down=new Float32Array(len);for(let i=0;i<len;i++)down[i]=.5*(samples[2*i]+samples[2*i+1]);
+ const rate=sampleRate/factor;
+ const minTau=Math.max(2,Math.floor(rate/maxFreq)),maxTau=Math.min(Math.ceil(rate/minFreq),Math.floor(len/3));
+ const N=Math.min(2400,len-maxTau-32),begin=Math.max(0,Math.floor((len-(N+maxTau))/2));
+ if(N<900)return null;
+ let mean=0;for(let i=0;i<N;i++)mean+=down[begin+i];mean/=N;
+ let rms2=0;for(let i=0;i<N;i++){const x=down[begin+i]-mean;rms2+=x*x}
+ const rms=Math.sqrt(rms2/N);
+ if(rms<Number($('sensitivitySelect').value))return{freq:null,rms,quality:0,reason:'quiet'};
+ const diff=new Float32Array(maxTau+2),norm=new Float32Array(maxTau+2);
+ // Center the signal to make low notes and breath noise more tolerant.
+ for(let tau=1;tau<=maxTau;tau++){let d=0;for(let i=0;i<N;i++){
+   const z=down[begin+i]-down[begin+i+tau];d+=z*z
+  }diff[tau]=d}
+ let sum=0;norm[0]=1;for(let tau=1;tau<=maxTau;tau++){sum+=diff[tau];norm[tau]=sum?diff[tau]*tau/sum:1}
+ let index=-1;const threshold=.18;
+ for(let t=minTau;t<=maxTau;t++)if(norm[t]<threshold){while(t<maxTau&&norm[t+1]<norm[t])t++;index=t;break}
+ if(index<0){let best=.32;for(let t=minTau;t<=maxTau;t++)if(norm[t]<best){best=norm[t];index=t}}
+ if(index<0)return{freq:null,rms,quality:0,reason:'unstable'};
+ let precise=index;if(index>1&&index<maxTau){let a=norm[index-1],b=norm[index],c=norm[index+1],d=a-2*b+c;
+   if(Math.abs(d)>1e-9)precise=index+clamp(.5*(a-c)/d,-1,1)}
+ const freq=rate/precise;
+ if(!Number.isFinite(freq)||freq<minFreq||freq>maxFreq)return{freq:null,rms,quality:0,reason:'unstable'};
+ return{freq,rms,quality:clamp(1-norm[index],0,1),reason:'ok'};
+}
 const median=list=>{const a=list.slice().sort((x,y)=>x-y);return a[Math.floor(a.length/2)]};
 function inputFrame(freq,quality,rms,now,reason){state.rms=rms||0;state.confidence=quality||0;
  if(freq&&quality>=.72){const midi=hzMidi(freq);if(Number.isFinite(midi)){
@@ -136,38 +245,70 @@ function inputFrame(freq,quality,rms,now,reason){state.rms=rms||0;state.confiden
   const med=median(state.history);state.pitch=midiHz(med);state.lastValidAt=now;state.detectedAt=now;
  }}else if(now-state.lastValidAt>270){state.pitch=null;state.history=[]}
  paintFrame(reason);
- if(state.started&&!state.clearing){const delta=state.lastFrame?Math.min(130,now-state.lastFrame):0;const tolerance=Number($('toleranceSelect').value);
+ if(state.started&&!state.clearing){const delta=state.lastFrame?Math.min(130,now-state.lastFrame):0;
+  const tolerance=Number($('toleranceSelect').value);
   const good=state.pitch!==null&&(now-state.lastValidAt<170)&&Math.abs(cents(state.pitch,midiHz(state.targetMidi)))<=tolerance;
-  if(good)state.holdMs+=delta;else if(now-state.lastValidAt>200||state.pitch!==null)state.holdMs=0;
+  if(good)state.holdMs+=delta;else state.holdMs=0;
   const goal=Number($('holdSelect').value),pct=clamp(state.holdMs/goal*100,0,100);
-  $('holdBar').style.width=pct+'%';ui('holdInfo',good?'維持正確音高：'+Math.round(pct)+'%': '對準洞口，維持約 '+(goal/1000).toFixed(1)+' 秒');
-  if(good&&state.holdMs>=goal)passGate();
+  $('holdBar').style.width=pct+'%';ui('holdInfo',good?'✅ 唱準了！保持 '+Math.round(pct)+'%':'唱準並維持約 '+(goal/1000).toFixed(1)+' 秒，穿過靠近的洞口');
  }
  state.lastFrame=now;
 }
-function loop(now){if(state.mode==='off')return;if(now-state.lastAnalysis>=72){state.lastAnalysis=now;
- if(state.mode==='mic'&&state.analyser){state.analyser.getFloatTimeDomainData(state.data);const p=detectPitch(state.data,state.context.sampleRate,125,1000);if(p)inputFrame(p.freq,p.quality,p.rms,now,p.reason)}
- else if(state.mode==='demo'){const midi=Number($('demoFlySlider').value);inputFrame(midiHz(midi),.99,.16,now,'demo')}
+function loop(now){if(state.mode==='off')return;
+ if(now-state.lastAnalysis>=76){state.lastAnalysis=now;
+  if(state.mode==='mic'&&state.analyser){state.analyser.getFloatTimeDomainData(state.data);
+   const [low,high]=selectedRange();let p;
+   if($('rangeSelect').value==='bass')p=detectBassPitch(state.data,state.context.sampleRate,70,Math.max(420,midiHz(high+3)));
+   else p=detectPitch(state.data,state.context.sampleRate,Math.min(125,midiHz(low-2)),Math.max(950,midiHz(high+3)));
+   if(p)inputFrame(p.freq,p.quality,p.rms,now,p.reason);
+  }else if(state.mode==='demo'){
+   const midi=Number($('demoFlySlider').value);inputFrame(midiHz(midi),.99,.16,now,'demo');
+  }
  }
+ animateFlight(now);
  state.raf=requestAnimationFrame(loop);
 }
-function paintFrame(reason){const micOn=state.mode!=='off';const pitch=state.pitch,have=pitch!==null&&micOn;
- if(have){const midi=hzMidi(pitch);ui('detectedNote',noteLabel(midi));ui('detectedFreq',Math.round(pitch)+' Hz');const c=cents(pitch,midiHz(state.targetMidi));ui('detectedCents',(c>0?'+':'')+c);ui('detectedConfidence',Math.round(state.confidence*100)+'%');
-  ui('testState',Math.abs(c)<=Number($('toleranceSelect').value)?'音準命中':'正在辨識');
-  $('scaleNeedle').style.left=clamp(50+c/300*50,1,99)+'%';ui('livePitch','目前：'+noteLabel(midi));
-  const [low,high]=selectedRange();const y=clamp(22+(high-midi)/(high-low)*56,11,89);
-  if(!state.clearing){state.planeY=state.planeY*.52+y*.48;$('plane').style.top=state.planeY+'%'}
-  if(state.started&&!state.clearing){const tolerance=Number($('toleranceSelect').value);
-   ui('flightFeedback',Math.abs(c)<=tolerance?'✅ 音準正確，繼續保持！':c>0?'🎵 稍微唱低一點':'🎵 稍微唱高一點');
-  }
-  ui('diagnostic',state.mode==='demo'?'模擬模式：下面的滑桿代替歌聲，不代表麥克風辨識成功。':(state.confidence>.9?'收音穩定！偵測到 '+noteLabel(midi)+'，可進入飛行闖關。':'有收到音高，但穩定度略低；試著拉長聲音、減少背景噪音。'));
- }else{ui('detectedNote','—');ui('detectedFreq','— Hz');ui('detectedCents','—');ui('detectedConfidence','—');ui('livePitch','目前：—');ui('testState',micOn?'偵測中':'未啟動');
-  if(state.started)ui('flightFeedback',state.mode==='mic'?'🎤 試著穩定唱一個長音':'請先開啟麥克風');
-  if(state.mode==='mic')ui('diagnostic',reason==='quiet'?'目前音量太小；可以唱長音、靠近一些，或將收音敏感度改為「高」。':'有聲音，但還不能穩定判斷音高。請一個人唱持續的「嗚——」，避免鋼琴或旁人同時發聲。');
+function paintFrame(reason){const active=state.mode!=='off',pitch=state.pitch,have=pitch!==null&&active;
+ if(have){const midi=hzMidi(pitch),c=cents(pitch,midiHz(state.targetMidi)),tol=Number($('toleranceSelect').value);
+  ui('detectedNote',noteLabel(midi));ui('detectedFreq',Math.round(pitch)+' Hz');ui('detectedCents',(c>0?'+':'')+c);ui('detectedConfidence',Math.round(state.confidence*100)+'%');
+  ui('testState',Math.abs(c)<=tol?'音準命中':'正在辨識');$('scaleNeedle').style.left=clamp(50+c/300*50,1,99)+'%';
+  $('flightNeedle').style.left=clamp(50+c/300*50,2,98)+'%';ui('livePitch','目前：'+noteLabel(midi));
+  const gateY=parseFloat($('playfield').style.getPropertyValue('--gate-y'))||50;
+  // Amplify the vertical pitch-to-height distance around the target so kids can SEE small errors.
+  const desired=clamp(gateY-clamp(midi-state.targetMidi,-3.6,3.6)*10,17,83);
+  if(!state.clearing){state.planeY=state.planeY*.62+desired*.38;$('plane').style.top=state.planeY+'%'}
+  if(Math.abs(c)<=tol){updateCoach('hit','🎯 剛剛好！','保持聲音，準備穿越！');if(state.started)ui('flightFeedback','✅ 音準正確，保持住！')}
+  else if(c>0){updateCoach('high','太高了！','⬇️ 請唱低一點');if(state.started)ui('flightFeedback','⬇️ 目前偏高，唱低一點')}
+  else{updateCoach('low','太低了！','⬆️ 請唱高一點');if(state.started)ui('flightFeedback','⬆️ 目前偏低，唱高一點')}
+  ui('diagnostic',state.mode==='demo'?'模擬模式：以滑桿模擬歌聲，並未使用麥克風。':
+    (state.confidence>.9?'收音穩定！目前 '+noteLabel(midi)+'，可以開始飛行。':'偵測到音高，但穩定度較低。請試著唱長音並降低背景聲。'));
+ }else{ui('detectedNote','—');ui('detectedFreq','— Hz');ui('detectedCents','—');ui('detectedConfidence','—');
+  ui('livePitch','目前：—');ui('testState',active?'偵測中':'未啟動');$('flightNeedle').style.left='50%';
+  updateCoach('waiting',active?'唱出一個長音':'準備開始飛行',active?'讓飛機跟著音高升降':'開啟麥克風後就能玩');
+  if(state.started)ui('flightFeedback','🎤 等待穩定的歌聲…');
+  if(state.mode==='mic')ui('diagnostic',reason==='quiet'?'收音量太小。可以靠近麥克風、唱長音，或調整敏感度。':'暫時無法穩定辨識音高。試著減少鋼琴及旁人聲音。');
  }
  const db=state.rms>0?20*Math.log10(state.rms):-90;
- ui('volumeNum',state.mode==='demo'?'模擬':(micOn?Math.round(db)+' dB':'—'));
- $('volumeBar').style.width=(micOn?clamp((db+70)/62*100,0,100):0)+'%';
+ ui('volumeNum',state.mode==='demo'?'模擬':active?Math.round(db)+' dB':'—');
+ $('volumeBar').style.width=(active?clamp((db+70)/62*100,0,100):0)+'%';
+}
+function planePercent(){const field=$('playfield'),plane=$('plane');return (plane.offsetLeft+plane.offsetWidth*.5)/Math.max(field.clientWidth,1)*100}
+function animateFlight(now){if(!state.started||state.clearing){state.lastWorldFrame=now;return}
+ let dt=state.lastWorldFrame?Math.min(.08,(now-state.lastWorldFrame)/1000):0;state.lastWorldFrame=now;
+ if(state.tab!=='game')return;
+ const planeX=planePercent(),sec=Number($('speedSelect').value);
+ const speed=(109-planeX)/sec;
+ state.gateX-=speed*dt;
+ $('gate').style.left=state.gateX+'%';
+ const diff=state.gateX-planeX;
+ const gateHalfWidth=$('gate').getBoundingClientRect().width/2/Math.max($('playfield').clientWidth,1)*100;
+ const collisionRadius=Math.max(3.7,gateHalfWidth*.7);
+ const accurate=state.pitch!==null&&(now-state.lastValidAt<190)&&Math.abs(cents(state.pitch,midiHz(state.targetMidi)))<=Number($('toleranceSelect').value);
+ // A green zone around the moving opening is the ONLY place a gate can be passed.
+ if(Math.abs(diff)<=Math.max(5.5,gateHalfWidth+1)&&accurate&&state.holdMs>=Number($('holdSelect').value)){
+  passGate();return;
+ }
+ if(diff<-(collisionRadius+4)){missGate();return}
 }
 function playTone(){const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx){setMessage('此瀏覽器無法播放提示音。');return}try{
  const ctx=state.context||new Ctx();ctx.resume().catch(()=>{});const now=ctx.currentTime+.035;
@@ -177,23 +318,71 @@ function playTone(){const Ctx=window.AudioContext||window.webkitAudioContext;if(
  if(ctx!==state.context)setTimeout(()=>ctx.close().catch(()=>{}),1100);
  }catch(e){setMessage('提示音播放失敗：'+e.message)}
 }
-function passGate(){state.clearing=true;state.started=false;state.holdMs=0;$('holdBar').style.width='100%';ui('flightFeedback','🌟 成功穿越！');state.score++;refreshProgress();$('plane').classList.add('flying');$('plane').classList.remove('idle');$('burst').classList.add('on');const passRound=state.round;
- state.delayId=setTimeout(()=>{if(state.round!==passRound)return;$('plane').classList.remove('flying');$('burst').classList.remove('on');$('plane').style.top='50%';state.planeY=50;
+
+function passGate(){state.clearing=true;state.holdMs=0;state.score++;state.missStreak=0;
+ refreshProgress();$('holdBar').style.width='100%';ui('flightFeedback','🌟 穿過洞口！繼續飛行！');
+ $('gate').classList.add('good');$('plane').classList.add('celebrate');$('burst').classList.add('on');
+ const checkpoint=state.round;
+ clearTimeout(state.delayId);state.delayId=setTimeout(()=>{
+  if(state.round!==checkpoint||state.mode==='off')return;
+  $('plane').classList.remove('celebrate');$('burst').classList.remove('on');$('gate').classList.remove('good');
   if(state.score>=state.total){endGame();return}
-  state.round++;pickTarget();state.history=[];state.pitch=null;state.holdMs=0;state.lastFrame=0;state.clearing=false;state.started=true;$('holdBar').style.width='0%';ui('flightFeedback','下一個洞口！唱出 '+noteLabel(state.targetMidi));
- },1000)}
-function endGame(){state.started=false;state.clearing=false;ui('endText','完成 '+state.score+' 個音準洞口！可以更換難度再挑戰一次。');$('endOverlay').classList.add('show');ui('flightFeedback','🏆 全部完成！')}
-function newGame(){clearTimeout(state.delayId);state.round=0;state.score=0;state.total=Number($('gatesSelect').value);state.started=false;state.clearing=false;state.holdMs=0;state.lastFrame=0;state.pitch=null;state.history=[];state.lastTarget=null;$('plane').classList.remove('flying');$('plane').classList.add('idle');$('burst').classList.remove('on');$('holdBar').style.width='0%';$('endOverlay').classList.remove('show');pickTarget();refreshProgress();ui('flightFeedback','請開啟收音後開始闖關');ui('holdInfo','對準洞口、維持正確音高就能通過。')}
-function startGame(){if(state.mode==='off'){setMessage('請先按「開啟麥克風」；若只是測試畫面，可以使用「模擬試玩」。');return}if(state.clearing)return;
- if(state.score>=state.total)newGame();state.started=true;state.lastFrame=0;state.holdMs=0;ui('flightFeedback',state.mode==='demo'?'模擬闖關中：在測試頁拖動滑桿':'請唱出 '+noteLabel(state.targetMidi)+'，對準洞口');$('holdBar').style.width='0%';switchTab('game')}
-function skip(){if(state.clearing)return;state.round++;state.started=false;state.holdMs=0;state.pitch=null;state.history=[];state.lastFrame=0;pickTarget();$('holdBar').style.width='0%';refreshProgress();ui('flightFeedback','已更換目標音；按「開始闖關」繼續。')}
-$('tabGame').onclick=()=>switchTab('game');$('tabTest').onclick=()=>switchTab('test');$('micBtn').onclick=enableMic;$('demoBtn').onclick=enableDemo;$('stopBtn').onclick=stopAudio;
-$('startGameBtn').onclick=startGame;$('restartBtn').onclick=newGame;$('skipBtn').onclick=skip;$('listenBtn').onclick=playTone;$('testToneBtn').onclick=playTone;$('testNextBtn').onclick=()=>{skip();switchTab('test')};$('againBtn').onclick=()=>{newGame();startGame()};$('closeEndBtn').onclick=()=>$('endOverlay').classList.remove('show');
-$('demoSlider').oninput=()=>{$('demoFlySlider').value=$('demoSlider').value;ui('demoSliderLabel',noteLabel(Number($('demoSlider').value)))};$('demoFlySlider').oninput=()=>{$('demoSlider').value=$('demoFlySlider').value;ui('demoSliderLabel',noteLabel(Number($('demoFlySlider').value)))};
-$('rangeSelect').onchange=()=>{newGame();const [lo,hi]=selectedRange();$('demoSlider').min=String(lo);$('demoSlider').max=String(hi);$('demoFlySlider').min=String(lo);$('demoFlySlider').max=String(hi)};
+  state.round++;pickTarget();spawnGate();state.clearing=false;state.holdMs=0;state.lastWorldFrame=0;state.lastFrame=0;
+  $('holdBar').style.width='0%';ui('flightFeedback','下一個洞口來了！目標 '+noteLabel(state.targetMidi));
+ },520);
+}
+function missGate(){state.clearing=true;state.holdMs=0;state.misses++;state.missStreak++;
+ $('gate').classList.add('bad');$('burst').textContent='💨 再試一次';$('burst').classList.add('on');
+ ui('flightFeedback','差一點！再試一次，不扣分。');const checkpoint=state.round;
+ clearTimeout(state.delayId);state.delayId=setTimeout(()=>{
+  if(state.round!==checkpoint||state.mode==='off')return;
+  $('gate').classList.remove('bad');$('burst').classList.remove('on');$('burst').textContent='🌟 過關！ 🌟';
+  if(state.missStreak>=2){state.missStreak=0;state.round++;pickTarget()}
+  spawnGate();state.clearing=false;state.holdMs=0;state.lastWorldFrame=0;state.lastFrame=0;
+  $('holdBar').style.width='0%';
+ },550);
+}
+function spawnGate(){state.gateX=106;$('gate').style.left=state.gateX+'%';$('gate').classList.remove('good','bad');
+ ui('gateSign',$('modeSelect').value==='solfege'?solLabel(state.targetMidi):noteLabel(state.targetMidi))}
+function endGame(){state.started=false;state.clearing=false;
+ ui('endText','成功穿越 '+state.score+' 個音準洞口！途中練習 '+state.misses+' 次。可以再挑戰其他音域。');
+ $('endOverlay').classList.add('show');ui('flightFeedback','🏆 全部完成！');refreshControls()}
+function newGame(){clearTimeout(state.delayId);state.delayId=0;state.round=0;state.score=0;state.misses=0;state.missStreak=0;
+ state.total=Number($('gatesSelect').value);state.started=false;state.clearing=false;state.holdMs=0;state.lastFrame=0;
+ state.lastWorldFrame=0;state.pitch=null;state.history=[];state.lastTarget=null;
+ $('plane').classList.remove('flying','celebrate');$('plane').classList.add('idle');$('burst').classList.remove('on');$('burst').textContent='🌟 過關！ 🌟';
+ $('holdBar').style.width='0%';$('endOverlay').classList.remove('show');pickTarget();spawnGate();refreshProgress();
+ ui('flightFeedback','開啟麥克風，再按「開始闖關」');ui('holdInfo','唱準目標音並維持住，才能穿過移動的洞口。');
+ updateCoach('waiting','準備飛行','唱高上升，唱低下降；洞口會一直往左移動');refreshControls();
+}
+function startGame(){if(state.mode==='off'){setMessage('請先開啟麥克風；想測試畫面可以按「模擬試玩」。');return}
+ if(state.clearing)return;
+ if(state.score>=state.total)newGame();
+ if(state.started){state.started=false;state.holdMs=0;state.lastWorldFrame=0;ui('flightFeedback','⏸ 已暫停，準備好後繼續');refreshControls();return}
+ state.started=true;state.lastFrame=0;state.lastWorldFrame=0;state.holdMs=0;
+ $('plane').classList.remove('idle');ui('flightFeedback','洞口正從右側接近！目標 '+noteLabel(state.targetMidi));
+ $('holdBar').style.width='0%';switchTab('game');refreshControls();
+}
+function skip(){if(state.clearing)return;const wasRunning=state.started;state.round++;state.holdMs=0;
+ state.pitch=null;state.history=[];state.lastFrame=0;state.lastWorldFrame=0;state.missStreak=0;
+ pickTarget();spawnGate();$('holdBar').style.width='0%';refreshProgress();
+ ui('flightFeedback',wasRunning?'換了新的目標音，繼續飛行！':'已更換目標音，按「開始闖關」繼續。')}
+$('tabGame').onclick=()=>switchTab('game');$('tabTest').onclick=()=>switchTab('test');
+$('micBtn').onclick=enableMic;$('demoBtn').onclick=enableDemo;$('stopBtn').onclick=stopAudio;
+$('startGameBtn').onclick=startGame;$('restartBtn').onclick=newGame;$('skipBtn').onclick=skip;
+$('listenBtn').onclick=playTone;$('testToneBtn').onclick=playTone;
+$('testNextBtn').onclick=()=>{skip();switchTab('test')};
+$('againBtn').onclick=()=>{newGame();startGame()};$('closeEndBtn').onclick=()=>$('endOverlay').classList.remove('show');
+$('demoSlider').oninput=()=>{$('demoFlySlider').value=$('demoSlider').value;ui('demoSliderLabel',noteLabel(Number($('demoSlider').value)))};
+$('demoFlySlider').oninput=()=>{$('demoSlider').value=$('demoFlySlider').value;ui('demoSliderLabel',noteLabel(Number($('demoFlySlider').value)))};
+$('rangeSelect').onchange=()=>{const [lo,hi]=selectedRange();
+ for(const id of ['demoSlider','demoFlySlider']){$(id).min=String(lo);$(id).max=String(hi);$(id).value=String(clamp(Number($(id).value),lo,hi))}
+ if(state.mode==='mic'){state.analyser.fftSize=$('rangeSelect').value==='bass'?8192:4096;state.data=new Float32Array(state.analyser.fftSize);state.history=[];state.pitch=null}
+ newGame()};
 $('gatesSelect').onchange=newGame;$('modeSelect').onchange=formatTarget;
 window.addEventListener('pagehide',()=>{if(state.mode==='mic')stopAudio()});
-window.addEventListener('visibilitychange',()=>{if(document.hidden&&state.started){state.started=false;state.holdMs=0;ui('flightFeedback','已暫停；返回畫面後按「開始闖關」。')}});
+window.addEventListener('visibilitychange',()=>{if(document.hidden&&state.started){state.started=false;state.holdMs=0;
+ ui('flightFeedback','已暫停；返回後按「繼續飛行」。');refreshControls()}});
 newGame();setConnection();
 })();
 </script>
